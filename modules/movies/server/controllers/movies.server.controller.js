@@ -10,6 +10,29 @@ var path = require('path'),
   _ = require('lodash');
 
 /**
+ * Upload a Movie
+ */
+exports.upload = function(req, res) {
+	console.log(req.files.file);
+	console.log(req.body);
+	res.jsonp({'Status':'Success'});
+	/*
+  var movie = new Movie(req.body);
+  movie.user = req.user;
+
+  movie.save(function(err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.jsonp(movie);
+    }
+  });
+	*/
+};
+
+/**
  * Create a Movie
  */
 exports.create = function(req, res) {

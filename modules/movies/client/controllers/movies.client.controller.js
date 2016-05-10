@@ -6,9 +6,9 @@
     .module('movies')
     .controller('MoviesController', MoviesController);
 
-  MoviesController.$inject = ['$scope', '$state', 'Authentication', 'movieResolve'];
+  MoviesController.$inject = ['$scope', '$state', 'Authentication', 'movieResolve', 'Upload'];
 
-  function MoviesController($scope, $state, Authentication, movie) {
+  function MoviesController($scope, $state, Authentication, movie, Upload) {
     var vm = this;
 
     vm.authentication = Authentication;
@@ -27,8 +27,23 @@
 
     // Save Movie
     function save(isValid) {
-      console.log('File Info: '+vm.movie.file.name+' Year '+vm.movie.year);
-			console.log(vm.movie.file);
+      console.log('File Info: ' + vm.movie.file.name + ' Year ' + vm.movie.year);
+      console.log(vm.movie.file);
+
+      Upload.upload({
+        url: '/api/moviesUpload',
+        data: {
+          file: vm.movie.file,
+          'username': 'Test User'
+        }
+      }).then(function(resp) {
+        console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+      }, function(resp) {
+        console.log('Error status: ' + resp.status);
+      }, function(evt) {
+        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+      });
     }
   }
 })();
