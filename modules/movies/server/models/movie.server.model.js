@@ -12,9 +12,13 @@ var mongoose = require('mongoose'),
 var MovieSchema = new Schema({
   name: {
     type: String,
-    default: '',
-    required: 'Please fill Movie name',
-    trim: true
+    default: 'TEST'
+  },
+  year: {
+    type: Number
+  },
+  fileId: {
+    type: Schema.ObjectId
   },
   created: {
     type: Date,

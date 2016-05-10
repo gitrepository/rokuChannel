@@ -5,14 +5,17 @@
   <div class="col-md-12">
     <form name="vm.form.movieForm" class="form-horizontal" ng-submit="vm.save(vm.form.movieForm.$valid)" novalidate>
       <fieldset>
-        <div class="form-group" show-errors>
-          <label class="control-label" for="name">Name</label>
-          <input name="name" type="text" ng-model="vm.movie.name" id="name" class="form-control" placeholder="Name" required>
-          <div ng-messages="vm.form.movieForm.name.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Movie name is required.</p>
-          </div>
+
+				<div class="form-group">
+          <label class="control-label" for="name">Movie Name</label>
+          <input name="name" type="text" ng-model="vm.movie.name" id="name" class="form-control" placeholder="Name">
         </div>
-        <div class="form-group">
+				<div class="form-group">
+          <label class="control-label" for="year">Movie Year</label>
+          <input name="year" type="text" ng-model="vm.movie.year" id="year" class="form-control" placeholder="Year">
+        </div>
+        
+				<div class="form-group">
           <button type="submit" class="btn btn-default">{{vm.movie._id ? 'Update' : 'Create'}}</button>
         </div>
         <div ng-show="vm.error" class="text-danger">

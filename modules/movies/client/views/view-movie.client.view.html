@@ -2,10 +2,8 @@
   <div class="page-header">
     <h1 data-ng-bind="vm.movie.name"></h1>
   </div>
-  <div class="pull-right"
-       data-ng-show="vm.movie.isCurrentUserOwner">
-    <a class="btn btn-primary"
-       data-ui-sref="movies.edit({ movieId: vm.movie._id })">
+  <div class="pull-right" data-ng-show="vm.movie.isCurrentUserOwner">
+    <a class="btn btn-primary" data-ui-sref="movies.edit({ movieId: vm.movie._id })">
       <i class="glyphicon glyphicon-edit"></i>
     </a>
     <a class="btn btn-primary" data-ng-click="vm.remove()">
@@ -14,9 +12,13 @@
   </div>
   <small>
     <em class="text-muted">
-      Posted on
+			<b>Movie Year</b>:&nbsp;
+			<span data-ng-bind="vm.movie.year"></span>
+			&nbsp;
+      <b>Posted on</b>:&nbsp;
       <span data-ng-bind="vm.movie.created | date:'mediumDate'"></span>
-      by
+     	&nbsp;
+			<b>By</b>:&nbsp;
       <span data-ng-if="vm.movie.user"
             data-ng-bind="vm.movie.user.displayName"></span>
       <span data-ng-if="!vm.movie.user">Deleted User</span>

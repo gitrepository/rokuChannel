@@ -3,13 +3,15 @@
     <h1>Movies</h1>
   </div>
   <div class="list-group">
-    <a data-ng-repeat="movie in vm.movies"
-       data-ui-sref="movies.view({ movieId: movie._id })"
-       class="list-group-item">
+    <a data-ng-repeat="movie in vm.movies" data-ui-sref="movies.view({ movieId: movie._id })" class="list-group-item">
       <small class="list-group-item-text">
-        Posted on
+				<b>Movie Year</b>:&nbsp
+				<span data-ng-bind="movie.year"></span>
+				&nbsp
+				<b>Posted on</b>:&nbsp
         <span data-ng-bind="movie.created | date:'mediumDate'"></span>
-        by
+				&nbsp
+        <b>By</b>:&nbsp
         <span data-ng-if="movie.user" data-ng-bind="movie.user.displayName"></span>
         <span data-ng-if="!movie.user">Deleted User</span>
       </small>
