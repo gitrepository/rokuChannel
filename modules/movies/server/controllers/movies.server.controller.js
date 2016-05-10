@@ -7,16 +7,38 @@ var path = require('path'),
   mongoose = require('mongoose'),
   Movie = mongoose.model('Movie'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-  _ = require('lodash');
+  _ = require('lodash'),
+  Grid = require('gridfs-stream');
+
+Grid.mongo = mongoose.mongo;
+var gfs = new Grid(mongoose.connection.db);
 
 /**
  * Upload a Movie
  */
 exports.upload = function(req, res) {
-	console.log(req.files.file);
-	console.log(req.body);
-	res.jsonp({'Status':'Success'});
-	/*
+  console.log(req.files.file);
+  console.log(req.body);
+
+  var part = req.files.file;
+
+  var writeStream = gfs.createWriteStream({
+    filename: part.name,
+    mode: 'w',
+    content_type: part.mimetype
+  });
+
+  writeStream.on('close', function() {
+    return res.status(200).send({
+      message: 'Success'
+    });
+  });
+
+  writeStream.write(part.data);
+
+  writeStream.end();
+
+  /*
   var movie = new Movie(req.body);
   movie.user = req.user;
 
@@ -68,9 +90,9 @@ exports.read = function(req, res) {
  * Update a Movie
  */
 exports.update = function(req, res) {
-  var movie = req.movie ;
+  var movie = req.movie;
 
-  movie = _.extend(movie , req.body);
+  movie = _.extend(movie, req.body);
 
   movie.save(function(err) {
     if (err) {
@@ -87,7 +109,7 @@ exports.update = function(req, res) {
  * Delete an Movie
  */
 exports.delete = function(req, res) {
-  var movie = req.movie ;
+  var movie = req.movie;
 
   movie.remove(function(err) {
     if (err) {
@@ -103,7 +125,7 @@ exports.delete = function(req, res) {
 /**
  * List of Movies
  */
-exports.list = function(req, res) { 
+exports.list = function(req, res) {
   Movie.find().sort('-created').populate('user', 'displayName').exec(function(err, movies) {
     if (err) {
       return res.status(400).send({
@@ -126,7 +148,7 @@ exports.movieByID = function(req, res, next, id) {
     });
   }
 
-  Movie.findById(id).populate('user', 'displayName').exec(function (err, movie) {
+  Movie.findById(id).populate('user', 'displayName').exec(function(err, movie) {
     if (err) {
       return next(err);
     } else if (!movie) {
