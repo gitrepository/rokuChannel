@@ -19,9 +19,11 @@ var gfs = new Grid(mongoose.connection.db);
 exports.upload = function(req, res) {
   console.log(req.files.file);
   console.log(req.body);
+	
+	var movie = new Movie(req.body);
 
   var part = req.files.file;
-
+/*
   var writeStream = gfs.createWriteStream({
     filename: part.name,
     mode: 'w',
