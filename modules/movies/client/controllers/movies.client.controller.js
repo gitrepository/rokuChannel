@@ -6,9 +6,9 @@
     .module('movies')
     .controller('MoviesController', MoviesController);
 
-  MoviesController.$inject = ['$scope', '$state', 'Authentication', 'movieResolve', 'Upload'];
+  MoviesController.$inject = ['$scope', '$state', 'Authentication', 'movieResolve'];
 
-  function MoviesController($scope, $state, Authentication, movie, Upload) {
+  function MoviesController($scope, $state, Authentication, movie) {
     var vm = this;
 
     vm.authentication = Authentication;
