@@ -6,6 +6,8 @@
 var path = require('path'),
 	mongoose = require('mongoose'),
 	Movie = mongoose.model('Movie'),
+	Schema = mongoose.Schema,
+	ObjectId = Schema.ObjectId,
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	_ = require('lodash'),
 	Grid = require('gridfs-stream');
@@ -18,6 +20,7 @@ var gfs = new Grid(mongoose.connection.db);
  */
 exports.upload = function (req, res) {
 	if (!req.body._id) {
+		//Movie creation
 		var movie = new Movie(req.body);
 		movie.user = req.user;
 
@@ -27,50 +30,25 @@ exports.upload = function (req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
+				
+				//File Creation
+				var part = req.files.file;
+				var writeStream = gfs.createWriteStream({
+					filename: part.name,
+					mode: 'w',
+					content_type: part.mimetype,
+					metadata: {
+						_parentId: movie._id
+					}
+				});
+				writeStream.write(part.data);
+
+				writeStream.end();
+
 				res.jsonp(movie);
 			}
 		});
 	}
-
-/*
-	var movie = new Movie(req.body);
-	console.log(req.body);
-	console.log(movie);
-
-
-	var part = req.files.file;
-
-	/*
-	  var writeStream = gfs.createWriteStream({
-	    filename: part.name,
-	    mode: 'w',
-	    content_type: part.mimetype
-	  });
-
-	  writeStream.on('close', function() {
-	    return res.status(200).send({
-	      message: 'Success'
-	    });
-	  });
-
-	  writeStream.write(part.data);
-
-	  writeStream.end();
-
-	  /*
-	  var movie = new Movie(req.body);
-	  movie.user = req.user;
-
-	  movie.save(function(err) {
-	    if (err) {
-	      return res.status(400).send({
-	        message: errorHandler.getErrorMessage(err)
-	      });
-	    } else {
-	      res.jsonp(movie);
-	    }
-	  });
-		*/
 };
 
 /**
