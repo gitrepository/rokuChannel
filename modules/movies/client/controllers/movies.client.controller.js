@@ -34,9 +34,9 @@
         url: '/api/moviesUpload',
         data: {
           file: vm.movie.file,
-          'movie.id': vm.movie._id,
-          'movie.name': vm.movie.name,
-          'movie.year': vm.movie.year
+          '_id': vm.movie._id,
+          'name': vm.movie.name,
+          'year': vm.movie.year
         }
       }).then(function(resp) {
         console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);

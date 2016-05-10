@@ -11,8 +11,7 @@ var mongoose = require('mongoose'),
  */
 var MovieSchema = new Schema({
   name: {
-    type: String,
-    default: 'TEST'
+    type: String
   },
   year: {
     type: Number

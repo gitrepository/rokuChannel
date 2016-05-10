@@ -4,11 +4,11 @@
  * Module dependencies.
  */
 var path = require('path'),
-  mongoose = require('mongoose'),
-  Movie = mongoose.model('Movie'),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-  _ = require('lodash'),
-  Grid = require('gridfs-stream');
+	mongoose = require('mongoose'),
+	Movie = mongoose.model('Movie'),
+	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+	_ = require('lodash'),
+	Grid = require('gridfs-stream');
 
 Grid.mongo = mongoose.mongo;
 var gfs = new Grid(mongoose.connection.db);
@@ -16,149 +16,166 @@ var gfs = new Grid(mongoose.connection.db);
 /**
  * Upload a Movie
  */
-exports.upload = function(req, res) {
-  console.log(req.files.file);
-  console.log(req.body);
-	
-	var movie = new Movie(req.body);
+exports.upload = function (req, res) {
+	if (!req.body._id) {
+		var movie = new Movie(req.body);
+		movie.user = req.user;
 
-  var part = req.files.file;
+		movie.save(function (err) {
+			if (err) {
+				return res.status(400).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				res.jsonp(movie);
+			}
+		});
+	}
+
 /*
-  var writeStream = gfs.createWriteStream({
-    filename: part.name,
-    mode: 'w',
-    content_type: part.mimetype
-  });
+	var movie = new Movie(req.body);
+	console.log(req.body);
+	console.log(movie);
 
-  writeStream.on('close', function() {
-    return res.status(200).send({
-      message: 'Success'
-    });
-  });
 
-  writeStream.write(part.data);
+	var part = req.files.file;
 
-  writeStream.end();
+	/*
+	  var writeStream = gfs.createWriteStream({
+	    filename: part.name,
+	    mode: 'w',
+	    content_type: part.mimetype
+	  });
 
-  /*
-  var movie = new Movie(req.body);
-  movie.user = req.user;
+	  writeStream.on('close', function() {
+	    return res.status(200).send({
+	      message: 'Success'
+	    });
+	  });
 
-  movie.save(function(err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(movie);
-    }
-  });
-	*/
+	  writeStream.write(part.data);
+
+	  writeStream.end();
+
+	  /*
+	  var movie = new Movie(req.body);
+	  movie.user = req.user;
+
+	  movie.save(function(err) {
+	    if (err) {
+	      return res.status(400).send({
+	        message: errorHandler.getErrorMessage(err)
+	      });
+	    } else {
+	      res.jsonp(movie);
+	    }
+	  });
+		*/
 };
 
 /**
  * Create a Movie
  */
-exports.create = function(req, res) {
-  var movie = new Movie(req.body);
-  movie.user = req.user;
+exports.create = function (req, res) {
+	var movie = new Movie(req.body);
+	movie.user = req.user;
 
-  movie.save(function(err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(movie);
-    }
-  });
+	movie.save(function (err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(movie);
+		}
+	});
 };
 
 /**
  * Show the current Movie
  */
-exports.read = function(req, res) {
-  // convert mongoose document to JSON
-  var movie = req.movie ? req.movie.toJSON() : {};
+exports.read = function (req, res) {
+	// convert mongoose document to JSON
+	var movie = req.movie ? req.movie.toJSON() : {};
 
-  // Add a custom field to the Article, for determining if the current User is the "owner".
-  // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Article model.
-  movie.isCurrentUserOwner = req.user && movie.user && movie.user._id.toString() === req.user._id.toString() ? true : false;
+	// Add a custom field to the Article, for determining if the current User is the "owner".
+	// NOTE: This field is NOT persisted to the database, since it doesn't exist in the Article model.
+	movie.isCurrentUserOwner = req.user && movie.user && movie.user._id.toString() === req.user._id.toString() ? true : false;
 
-  res.jsonp(movie);
+	res.jsonp(movie);
 };
 
 /**
  * Update a Movie
  */
-exports.update = function(req, res) {
-  var movie = req.movie;
+exports.update = function (req, res) {
+	var movie = req.movie;
 
-  movie = _.extend(movie, req.body);
+	movie = _.extend(movie, req.body);
 
-  movie.save(function(err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(movie);
-    }
-  });
+	movie.save(function (err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(movie);
+		}
+	});
 };
 
 /**
  * Delete an Movie
  */
-exports.delete = function(req, res) {
-  var movie = req.movie;
+exports.delete = function (req, res) {
+	var movie = req.movie;
 
-  movie.remove(function(err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(movie);
-    }
-  });
+	movie.remove(function (err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(movie);
+		}
+	});
 };
 
 /**
  * List of Movies
  */
-exports.list = function(req, res) {
-  Movie.find().sort('-created').populate('user', 'displayName').exec(function(err, movies) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(movies);
-    }
-  });
+exports.list = function (req, res) {
+	Movie.find().sort('-created').populate('user', 'displayName').exec(function (err, movies) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(movies);
+		}
+	});
 };
 
 /**
  * Movie middleware
  */
-exports.movieByID = function(req, res, next, id) {
+exports.movieByID = function (req, res, next, id) {
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send({
-      message: 'Movie is invalid'
-    });
-  }
+	if (!mongoose.Types.ObjectId.isValid(id)) {
+		return res.status(400).send({
+			message: 'Movie is invalid'
+		});
+	}
 
-  Movie.findById(id).populate('user', 'displayName').exec(function(err, movie) {
-    if (err) {
-      return next(err);
-    } else if (!movie) {
-      return res.status(404).send({
-        message: 'No Movie with that identifier has been found'
-      });
-    }
-    req.movie = movie;
-    next();
-  });
+	Movie.findById(id).populate('user', 'displayName').exec(function (err, movie) {
+		if (err) {
+			return next(err);
+		} else if (!movie) {
+			return res.status(404).send({
+				message: 'No Movie with that identifier has been found'
+			});
+		}
+		req.movie = movie;
+		next();
+	});
 };
