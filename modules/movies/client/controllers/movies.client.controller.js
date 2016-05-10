@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   // Movies controller
@@ -6,9 +6,9 @@
     .module('movies')
     .controller('MoviesController', MoviesController);
 
-  MoviesController.$inject = ['$scope', '$state', 'Authentication', 'movieResolve'];
+  MoviesController.$inject = ['$scope', '$state', 'Authentication', 'movieResolve', 'Upload'];
 
-  function MoviesController ($scope, $state, Authentication, movie) {
+  function MoviesController($scope, $state, Authentication, movie, Upload) {
     var vm = this;
 
     vm.authentication = Authentication;
@@ -27,27 +27,8 @@
 
     // Save Movie
     function save(isValid) {
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'vm.form.movieForm');
-        return false;
-      }
-
-      // TODO: move create/update logic to service
-      if (vm.movie._id) {
-        vm.movie.$update(successCallback, errorCallback);
-      } else {
-        vm.movie.$save(successCallback, errorCallback);
-      }
-
-      function successCallback(res) {
-        $state.go('movies.view', {
-          movieId: res._id
-        });
-      }
-
-      function errorCallback(res) {
-        vm.error = res.data.message;
-      }
+      console.log('File Info: '+vm.movie.file.name+' Year '+vm.movie.year);
+			console.log(vm.movie.file);
     }
   }
 })();
