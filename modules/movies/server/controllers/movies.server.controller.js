@@ -30,7 +30,7 @@ exports.upload = function (req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				
+
 				//File Creation
 				var part = req.files.file;
 				var writeStream = gfs.createWriteStream({
@@ -49,6 +49,46 @@ exports.upload = function (req, res) {
 			}
 		});
 	}
+};
+
+/**
+ * Download a Movie
+ */
+exports.download = function (req, res) {
+	console.log('In Download');
+/*
+	gfs.files.find({
+		"metadata.OwnerId": new ObjectId("57322c0ddf66e0142789c255")
+	}).toArray(function (err, files) {
+
+		if (files.length === 0) {
+			return res.status(400).send({
+				message: 'File not found'
+			});
+		}
+
+		res.writeHead(200, {
+			'Content-Type': files[0].contentType
+		});
+
+		var readstream = gfs.createReadStream({
+			filename: files[0].filename
+		});
+
+		readstream.on('data', function (data) {
+			res.write(data);
+		});
+
+		readstream.on('end', function () {
+			res.end();
+		});
+
+		readstream.on('error', function (err) {
+			console.log('An error occurred!', err);
+			throw err;
+		});
+	});
+*/
 };
 
 /**
@@ -73,6 +113,56 @@ exports.create = function (req, res) {
  * Show the current Movie
  */
 exports.read = function (req, res) {
+	console.log('In READ');
+
+	
+	
+	/*
+
+	gfs.files.find({
+		"metadata.OwnerId": new ObjectId("57322c0ddf66e0142789c255")
+	}).toArray(function (err, files) {
+
+		if (files.length === 0) {
+		console.log('ERR');
+			return res.status(400).send({
+				message: 'File not found'
+			});
+		}
+
+		res.writeHead(200, {
+			'Content-Type': files[0].contentType
+		});
+
+		var readstream = gfs.createReadStream({
+			filename: files[0].filename
+		});
+
+		readstream.on('data', function (data) {
+			console.log(data);
+		});
+
+		readstream.on('end', function () {
+			res.end();
+		});
+
+		readstream.on('error', function (err) {
+			console.log('An error occurred!', err);
+			throw err;
+		});
+		
+		res.jsonp({});
+	});
+
+
+*/
+
+
+
+
+
+
+	
 	// convert mongoose document to JSON
 	var movie = req.movie ? req.movie.toJSON() : {};
 
@@ -81,6 +171,7 @@ exports.read = function (req, res) {
 	movie.isCurrentUserOwner = req.user && movie.user && movie.user._id.toString() === req.user._id.toString() ? true : false;
 
 	res.jsonp(movie);
+	
 };
 
 /**
