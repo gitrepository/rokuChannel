@@ -16,16 +16,25 @@
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="upload">Upload File{{vm.movie.file.name ? ' - '+vm.movie.file.name : ''}}</label><br/>
+          <label class="control-label" for="upload">Upload File{{vm.movie.file.name ? ' - '+vm.movie.file.name : ''}}</label>
+          <br/>
           <div class="btn btn-default" ngf-select ng-model="vm.movie.file" name="file">Select File</div>
         </div>
 
-				<div class="form-group">
+        <div class="form-group">
           <button type="submit" class="btn btn-default">{{vm.movie._id ? 'Update' : 'Create'}}</button>
         </div>
         <div ng-show="vm.error" class="text-danger">
           <strong ng-bind="vm.error"></strong>
         </div>
+        <br/>
+        <br/>
+				
+				<!--
+        <video width="400" controls>
+					<source src="/api/moviesDownload" type="video/mp4">
+        </video>
+			-->
       </fieldset>
     </form>
   </div>
