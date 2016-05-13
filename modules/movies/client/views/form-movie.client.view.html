@@ -1,6 +1,7 @@
 <section>
-  <div class="page-header">
-    <h1>{{vm.movie._id ? 'Edit Movie' : 'New Movie'}}</h1>
+	
+  <div class="page-header" ng-if="!vm.movie._id">
+    <h1>New Movie</h1>
   </div>
   <div class="col-md-12">
     <form name="vm.form.movieForm" class="form-horizontal" ng-submit="vm.save(vm.form.movieForm.$valid)" novalidate>

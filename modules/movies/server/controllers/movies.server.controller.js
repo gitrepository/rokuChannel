@@ -55,8 +55,9 @@ exports.upload = function(req, res) {
  * Download a Movie
  */
 exports.download = function(req, res) {
+	console.log('IN Download Service');
   gfs.files.find({
-    'filename': 'SV.mp4'
+    'filename': 'SV_50.mp4'
   }).toArray(function(err, files) {
     console.log('In FILE Read');
 
@@ -67,6 +68,7 @@ exports.download = function(req, res) {
     }
 
     res.writeHead(200, {
+			'Accept-Ranges': 'bytes',
       'Content-Type': files[0].contentType
     });
 
@@ -79,6 +81,7 @@ exports.download = function(req, res) {
     });
 
     readstream.on('end', function() {
+			console.log('Done');
       res.end();
     });
 

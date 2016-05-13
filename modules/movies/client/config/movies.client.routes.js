@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   angular
@@ -33,12 +33,12 @@
         },
         data: {
           roles: ['user', 'admin'],
-          pageTitle : 'Movies Create'
+          pageTitle: 'Movies Create'
         }
       })
       .state('movies.edit', {
         url: '/:movieId/edit',
-        templateUrl: 'modules/movies/client/views/form-movie.client.view.html',
+        templateUrl: 'modules/movies/client/views/edit-movie.client.view.html',
         controller: 'MoviesController',
         controllerAs: 'vm',
         resolve: {
@@ -57,7 +57,7 @@
         resolve: {
           movieResolve: getMovie
         },
-        data:{
+        data: {
           pageTitle: 'Movie {{ articleResolve.name }}'
         }
       });

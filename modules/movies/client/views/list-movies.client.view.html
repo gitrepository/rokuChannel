@@ -2,62 +2,32 @@
   <div class="page-header">
     <h2>Movies</h2>
   </div>
-  <div class="alert alert-warning text-center" data-ng-if="!vm.movies.length">
-    No Movies yet, why don't you <a data-ui-sref="movies.create">create one</a>?
-  </div>
-
-  <div data-ng-if="vm.movies.length">
-    <form>
-      <div class="form-group" show-errors>
-        <label class="control-label" for="title">Search</label>
-        <input name="title" type="text" ng-model="vm.movie.search" id="search" class="form-control" placeholder="Movie Search" />
-      </div>
-
-    </form>
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Year</th>
-          <th>Posted By</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="movie in vm.movies">
-          <td><a ui-sref="movies.view({ movieId: movie._id })">{{movie.name}}</a></td>
-          <td>{{movie.year}}</td>
-          <td>{{movie.user.displayName}}</td>
-        </tr>
-      </tbody>
-    </table>
-
-</section>
-
-</div>
-
-<!--
-<section>
-  <div class="page-header">
-    <h1>Movies</h1>
-  </div>
-  <div class="list-group">
-    <a data-ng-repeat="movie in vm.movies" data-ui-sref="movies.view({ movieId: movie._id })" class="list-group-item">
-      <small class="list-group-item-text">
-				<b>Movie Year</b>:&nbsp
-				<span data-ng-bind="movie.year"></span>
-				&nbsp
-				<b>Posted on</b>:&nbsp
-        <span data-ng-bind="movie.created | date:'mediumDate'"></span>
-				&nbsp
-        <b>By</b>:&nbsp
-        <span data-ng-if="movie.user" data-ng-bind="movie.user.displayName"></span>
-        <span data-ng-if="!movie.user">Deleted User</span>
-      </small>
-      <h4 class="list-group-item-heading" data-ng-bind="movie.name"></h4>
-    </a>
-  </div>
   <div class="alert alert-warning text-center" data-ng-if="vm.movies.$resolved && !vm.movies.length">
     No Movies yet, why don't you <a data-ui-sref="movies.create">create one</a>?
   </div>
+
+	<form>
+		<div class="form-group" show-errors>
+			<label class="control-label" for="title">Search</label>
+			<input name="title" type="text" ng-model="vm.movie.search" id="search" class="form-control" placeholder="Movie Search"/>
+		</div>
+
+	</form>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Year</th>
+        <th>Posted By</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="movie in vm.movies">
+        <td><a ui-sref="movies.view({ movieId: movie._id })">{{movie.name}}</a></td>
+        <td>{{movie.year}}</td>
+        <td>{{movie.user.displayName}}</td>
+      </tr>
+    </tbody>
+  </table>
+
 </section>
--->
