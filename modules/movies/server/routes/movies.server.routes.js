@@ -20,9 +20,10 @@ module.exports = function(app) {
   app.route('/api/moviesUpload')
     .post(movies.upload);
 
-  app.route('/api/moviesDownload')
+  app.route('/api/moviesDownload/:movieId')
     .get(movies.download);
 
   // Finish by binding the Movie middleware
   app.param('movieId', movies.movieByID);
+	
 };

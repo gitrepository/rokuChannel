@@ -6,6 +6,7 @@ module.exports = {
       css: [
         'public/lib/bootstrap/dist/css/bootstrap.css',
         'public/lib/bootstrap/dist/css/bootstrap-theme.css'
+				//'public/lib/video.js/css/video-js.js'
       ],
       js: [
         'public/lib/angular/angular.js',
@@ -18,6 +19,7 @@ module.exports = {
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
 
 				'public/lib/ng-file-upload/ng-file-upload.js',
+				//'public/lib/video.js/src/video.js'
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },

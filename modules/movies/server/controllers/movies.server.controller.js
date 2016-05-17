@@ -6,8 +6,6 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   Movie = mongoose.model('Movie'),
-  Schema = mongoose.Schema,
-  ObjectId = Schema.ObjectId,
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash'),
   Grid = require('gridfs-stream');
@@ -19,9 +17,10 @@ var gfs = new Grid(mongoose.connection.db);
  * Upload a Movie
  */
 exports.upload = function(req, res) {
+	var movie;
   if (!req.body._id) {
     //Movie creation
-    var movie = new Movie(req.body);
+    movie = new Movie(req.body);
     movie.user = req.user;
 
     movie.save(function(err) {
@@ -30,7 +29,6 @@ exports.upload = function(req, res) {
           message: errorHandler.getErrorMessage(err)
         });
       } else {
-
         //File Creation
         var part = req.files.file;
         var writeStream = gfs.createWriteStream({
@@ -48,6 +46,23 @@ exports.upload = function(req, res) {
         res.jsonp(movie);
       }
     });
+		
+  } else {
+		console.log('In Edit');
+		movie = new Movie(req.body);
+    movie.user = req.user;
+		
+		console.log(movie);
+    //movie = _.extend(movie, req.body);
+    movie.save(function(err) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        res.jsonp(movie);
+      }
+    });
   }
 };
 
@@ -55,9 +70,11 @@ exports.upload = function(req, res) {
  * Download a Movie
  */
 exports.download = function(req, res) {
-	console.log('IN Download Service');
+  console.log('IN Download Service ');
+  var movie = req.movie;
+  console.log(movie);
   gfs.files.find({
-    'filename': 'SV_50.mp4'
+    'metadata._parentId': new mongoose.Types.ObjectId(movie._id)
   }).toArray(function(err, files) {
     console.log('In FILE Read');
 
@@ -67,8 +84,8 @@ exports.download = function(req, res) {
       });
     }
 
+
     res.writeHead(200, {
-			'Accept-Ranges': 'bytes',
       'Content-Type': files[0].contentType
     });
 
@@ -81,7 +98,7 @@ exports.download = function(req, res) {
     });
 
     readstream.on('end', function() {
-			console.log('Done');
+      console.log('Done');
       res.end();
     });
 
@@ -189,6 +206,7 @@ exports.movieByID = function(req, res, next, id) {
   }
 
   Movie.findById(id).populate('user', 'displayName').exec(function(err, movie) {
+		console.log('In Server Binding');
     if (err) {
       return next(err);
     } else if (!movie) {

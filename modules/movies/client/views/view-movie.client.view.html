@@ -1,7 +1,7 @@
 <section>
-	<ng-include src="'modules/movies/client/views/nav-movie.client.html'"></ng-include>
-	<video width="400" controls>
-		<source src="/api/moviesDownload" type="video/mp4">
-	</video>
+  <ng-include src="'modules/movies/client/views/nav-movie.client.html'"></ng-include>
+  <video controls>
+    <source src="" dynamic-url dynamic-url-src="{{video_url}}">
+  </video>
 
 </section>
